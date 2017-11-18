@@ -35,7 +35,7 @@ public class TestSPOnline {
 				JSONObject json = new JSONObject(jsonString);
 				String formDigestValue = json.getJSONObject("d").getJSONObject("GetContextWebInformation").getString("FormDigestValue");
 				System.out.println("FormDigestValue=" + formDigestValue);
-
+				/*
 				// get all webs
 				jsonString = SPOnline.get(token, domain, "/_api/web/webs");
 				if (jsonString != null) {
@@ -137,6 +137,32 @@ public class TestSPOnline {
 				jsonString = SPOnline.delete(token, domain, "/_api/web/lists/GetByTitle('John')", formDigestValue);
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
+				}*/
+
+				// caml retrieve list item
+				jsonString = SPOnline.post(token, domain, "/_api/web/lists/GetByTitle('doclib2')/DefaultView", null, formDigestValue);
+				if (jsonString != null) {
+					json = new JSONObject(jsonString);
+					String viewQuery = json.getJSONObject("d").getString("ViewQuery");
+
+					System.out.println("viewQuery=" + viewQuery);
+					JSONObject data = new JSONObject();
+					JSONObject __metadata = new JSONObject();
+					data.put("query", __metadata);
+					JSONObject type = new JSONObject();
+					__metadata.put("__metadata", type);
+					type.put("type", "SP.CamlQuery");
+					type.put("ViewXml", "<View><Query><RowLimit>2</RowLimit></Query></View>");
+
+					
+					System.out.println(CommonLib.prettyFormatJson(data.toString()));
+					jsonString = SPOnline.post(token, domain, "/_api/web/lists/GetByTitle('doclib2')/GetItems", data.toString(), formDigestValue);
+					System.out.println(CommonLib.prettyFormatJson(jsonString));
+					
+					
+					/*jsonString = SPOnline.get(token, domain, "/_api/web/lists/GetByTitle('doclib2')/GetItems(query=@v1)?@v1=" + data);
+					System.out.println(CommonLib.prettyFormatJson(jsonString));*/
+
 				}
 			} else {
 				System.err.println("Login failed");
