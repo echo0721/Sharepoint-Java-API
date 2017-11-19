@@ -152,7 +152,6 @@ public class TestSPOnline {
 					__metadata.put("__metadata", type);
 					HashMap<String, String> map = new HashMap<>();
 					map.put("type", "SP.CamlQuery");
-
 					__metadata.put("__metadata", map);
 
 					__metadata.put("ViewXml", "<View>"
