@@ -6,8 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -144,24 +143,38 @@ public class TestSPOnline {
 				if (jsonString != null) {
 					json = new JSONObject(jsonString);
 					String viewQuery = json.getJSONObject("d").getString("ViewQuery");
-
 					System.out.println("viewQuery=" + viewQuery);
+					
 					JSONObject data = new JSONObject();
 					JSONObject __metadata = new JSONObject();
 					data.put("query", __metadata);
 					JSONObject type = new JSONObject();
 					__metadata.put("__metadata", type);
-					type.put("type", "SP.CamlQuery");
-					type.put("ViewXml", "<View><Query><RowLimit>2</RowLimit></Query></View>");
+					HashMap<String, String> map = new HashMap<>();
+					map.put("type", "SP.CamlQuery");
 
-					
+					__metadata.put("__metadata", map);
+
+					__metadata.put("ViewXml", "<View>"
+							+ "<RowLimit>4</RowLimit>"
+							+ "<Query>\n"
+							+ "   <Where>\n"
+							+ "      <Contains>\n"
+							+ "         <FieldRef Name='FileLeafRef' />\n"
+							+ "         <Value Type='Text'>xlsx</Value>\n"
+							+ "      </Contains>\n"
+							+ "   </Where>\n"
+							+ "   <OrderBy>\n"
+							+ "      <FieldRef Name='FileLeafRef' Ascending='False' />\n"
+							+ "   </OrderBy>\n"
+							+ "</Query>"
+							+ "</View>");
+
 					System.out.println(CommonLib.prettyFormatJson(data.toString()));
-					jsonString = SPOnline.post(token, domain, "/_api/web/lists/GetByTitle('doclib2')/GetItems", data.toString(), formDigestValue);
+					jsonString = SPOnline.post(token, domain, "/_api/web/lists/GetByTitle('doclib2')/GetItems?$select=FileLeafRef", data.toString(), formDigestValue);
+					json = new JSONObject(jsonString);
+					System.out.println("length=" + json.getJSONObject("d").getJSONArray("results").length());
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
-					
-					
-					/*jsonString = SPOnline.get(token, domain, "/_api/web/lists/GetByTitle('doclib2')/GetItems(query=@v1)?@v1=" + data);
-					System.out.println(CommonLib.prettyFormatJson(jsonString));*/
 
 				}
 			} else {
