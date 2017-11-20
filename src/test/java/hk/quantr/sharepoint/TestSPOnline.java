@@ -34,7 +34,7 @@ public class TestSPOnline {
 				JSONObject json = new JSONObject(jsonString);
 				String formDigestValue = json.getJSONObject("d").getJSONObject("GetContextWebInformation").getString("FormDigestValue");
 				System.out.println("FormDigestValue=" + formDigestValue);
-				/*
+
 				// get all webs
 				jsonString = SPOnline.get(token, domain, "/_api/web/webs");
 				if (jsonString != null) {
@@ -136,7 +136,7 @@ public class TestSPOnline {
 				jsonString = SPOnline.delete(token, domain, "/_api/web/lists/GetByTitle('John')", formDigestValue);
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
-				}*/
+				}
 
 				// caml retrieve list item
 				jsonString = SPOnline.post(token, domain, "/_api/web/lists/GetByTitle('doclib2')/DefaultView", null, formDigestValue);
@@ -144,7 +144,7 @@ public class TestSPOnline {
 					json = new JSONObject(jsonString);
 					String viewQuery = json.getJSONObject("d").getString("ViewQuery");
 					System.out.println("viewQuery=" + viewQuery);
-					
+
 					JSONObject data = new JSONObject();
 					JSONObject __metadata = new JSONObject();
 					data.put("query", __metadata);
