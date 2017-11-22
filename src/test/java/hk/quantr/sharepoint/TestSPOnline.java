@@ -36,6 +36,7 @@ public class TestSPOnline {
 				String formDigestValue = json.getJSONObject("d").getJSONObject("GetContextWebInformation").getString("FormDigestValue");
 				System.out.println("FormDigestValue=" + formDigestValue);
 
+				/*
 				// get all webs
 				jsonString = SPOnline.get(token, domain, "/_api/web/webs");
 				if (jsonString != null) {
@@ -138,36 +139,47 @@ public class TestSPOnline {
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 				}
+				 */
+				// use caml retrieve list item
+				JSONObject data = new JSONObject();
+				JSONObject __metadata = new JSONObject();
+				data.put("query", __metadata);
+				JSONObject type = new JSONObject();
+				__metadata.put("__metadata", type);
+				HashMap<String, String> map = new HashMap<>();
+				map.put("type", "SP.CamlQuery");
+				__metadata.put("__metadata", map);
 
-				// caml retrieve list item
+				__metadata.put("ViewXml", "<View>"
+						+ "<RowLimit>4</RowLimit>"
+						+ "<Query>\n"
+						+ "   <Where>\n"
+						+ "      <Contains>\n"
+						+ "         <FieldRef Name='FileLeafRef' />\n"
+						+ "         <Value Type='Text'>xlsx</Value>\n"
+						+ "      </Contains>\n"
+						+ "   </Where>\n"
+						+ "   <OrderBy>\n"
+						+ "      <FieldRef Name='FileLeafRef' Ascending='False' />\n"
+						+ "   </OrderBy>\n"
+						+ "</Query>"
+						+ "</View>");
+
+				System.out.println(CommonLib.prettyFormatJson(data.toString()));
+				jsonString = SPOnline.post(token, domain, "/_api/web/lists/GetByTitle('doclib2')/GetItems?$select=FileLeafRef", data.toString(), formDigestValue);
+				json = new JSONObject(jsonString);
+				System.out.println("length=" + json.getJSONObject("d").getJSONArray("results").length());
+				System.out.println(CommonLib.prettyFormatJson(jsonString));
+
+				// retrieve items using default view
 				jsonString = SPOnline.post(token, domain, "/_api/web/lists/GetByTitle('doclib2')/DefaultView", null, formDigestValue);
 				if (jsonString != null) {
 					json = new JSONObject(jsonString);
 					String viewQuery = json.getJSONObject("d").getString("ViewQuery");
 					System.out.println("viewQuery=" + viewQuery);
 
-					JSONObject data = new JSONObject();
-					JSONObject __metadata = new JSONObject();
-					data.put("query", __metadata);
-					JSONObject type = new JSONObject();
-					__metadata.put("__metadata", type);
-					HashMap<String, String> map = new HashMap<>();
-					map.put("type", "SP.CamlQuery");
-					__metadata.put("__metadata", map);
-
 					__metadata.put("ViewXml", "<View>"
-							+ "<RowLimit>4</RowLimit>"
-							+ "<Query>\n"
-							+ "   <Where>\n"
-							+ "      <Contains>\n"
-							+ "         <FieldRef Name='FileLeafRef' />\n"
-							+ "         <Value Type='Text'>xlsx</Value>\n"
-							+ "      </Contains>\n"
-							+ "   </Where>\n"
-							+ "   <OrderBy>\n"
-							+ "      <FieldRef Name='FileLeafRef' Ascending='False' />\n"
-							+ "   </OrderBy>\n"
-							+ "</Query>"
+							+ "<Query>" + viewQuery + "</Query>"
 							+ "</View>");
 
 					System.out.println(CommonLib.prettyFormatJson(data.toString()));
@@ -175,7 +187,6 @@ public class TestSPOnline {
 					json = new JSONObject(jsonString);
 					System.out.println("length=" + json.getJSONObject("d").getJSONArray("results").length());
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
-
 				}
 			} else {
 				System.err.println("Login failed");
