@@ -39,4 +39,9 @@ You have to encode it yourself, like this
 ```
 String jsonString = SPOnline.get(token, serverInfo.domain, serverInfo.path + "/_api/web/lists?$select=ID,Title&$filter=" + URLEncoder.encode("basetype eq 1", "utf-8") + "&$orderby=title");
 ```
-		
+
+## Author
+My name is Peter, http://peter.quantr.hk , if you have troubles, please email me peter@quantr.hk
+
+## Tutorial
+All tutorials are in the wiki https://gitlab.com/quantr/sharepoint/Sharepoint-Java-API/wikis/Tutorial
