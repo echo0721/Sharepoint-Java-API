@@ -1,4 +1,4 @@
-[banner]: http://www.quantr.hk/wp-content/uploads/2017/11/banner1.png
+[logo]: http://www.quantr.hk/wp-content/uploads/2017/11/banner1.png
 
 # Sharepoint Java API
 This library is calling SharePoint restful API https://msdn.microsoft.com/en-us/library/office/dn499819.aspx
