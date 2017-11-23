@@ -36,7 +36,6 @@ public class TestSPOnline {
 				String formDigestValue = json.getJSONObject("d").getJSONObject("GetContextWebInformation").getString("FormDigestValue");
 				System.out.println("FormDigestValue=" + formDigestValue);
 
-				/*
 				// get all webs
 				jsonString = SPOnline.get(token, domain, "/_api/web/webs");
 				if (jsonString != null) {
@@ -139,7 +138,7 @@ public class TestSPOnline {
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 				}
-				 */
+				
 				// use caml retrieve list item
 				JSONObject data = new JSONObject();
 				JSONObject __metadata = new JSONObject();
