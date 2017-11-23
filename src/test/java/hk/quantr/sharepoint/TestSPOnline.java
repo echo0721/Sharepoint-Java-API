@@ -139,7 +139,7 @@ public class TestSPOnline {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 				}
 				
-				// use caml retrieve list item
+				// use caml retrieve list items
 				JSONObject data = new JSONObject();
 				JSONObject __metadata = new JSONObject();
 				data.put("query", __metadata);
