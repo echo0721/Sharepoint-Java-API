@@ -138,7 +138,7 @@ public class TestSPOnline {
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 				}
-				
+
 				// use caml retrieve list items
 				JSONObject data = new JSONObject();
 				JSONObject __metadata = new JSONObject();
@@ -176,12 +176,11 @@ public class TestSPOnline {
 					json = new JSONObject(jsonString);
 					String viewQuery = json.getJSONObject("d").getString("ViewQuery");
 					System.out.println("viewQuery=" + viewQuery);
-
+					__metadata.remove("ViewXml");
 					__metadata.put("ViewXml", "<View>"
 							+ "<Query>" + viewQuery + "</Query>"
 							+ "</View>");
 
-					System.out.println(CommonLib.prettyFormatJson(data.toString()));
 					jsonString = SPOnline.post(token, domain, "/_api/web/lists/GetByTitle('doclib2')/GetItems?$select=FileLeafRef", data.toString(), formDigestValue);
 					json = new JSONObject(jsonString);
 					System.out.println("length=" + json.getJSONObject("d").getJSONArray("results").length());
