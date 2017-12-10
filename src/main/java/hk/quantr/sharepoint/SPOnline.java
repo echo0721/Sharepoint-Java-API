@@ -148,9 +148,6 @@ public class SPOnline {
 	private static Pair<String, String> submitToken(String domain, String token) throws IOException {
 		String loginContextPath = "/_forms/default.aspx?wa=wsignin1.0";
 		String url = String.format("https://%s.sharepoint.com%s", domain, loginContextPath);
-//		logger.info("url=" + url);
-//		logger.info("token2=" + token);
-//		logger.info("java.version=" + System.getProperty("java.version"));
 		CookieHandler.setDefault(null);
 		URL u = new URL(url);
 		URLConnection uc = u.openConnection();
@@ -159,7 +156,6 @@ public class SPOnline {
 		connection.setDoInput(true);
 		connection.setRequestMethod("POST");
 		connection.addRequestProperty("Accept", "application/x-www-form-urlencoded");
-		//connection.addRequestProperty("User-Agent", "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)");
 		connection.addRequestProperty("Content-Type", "text/xml; charset=utf-8");
 		connection.setInstanceFollowRedirects(false);
 		OutputStream out = connection.getOutputStream();
@@ -185,31 +181,7 @@ public class SPOnline {
 				}
 			}
 		}
-		/*
-		InputStream in = connection.getInputStream();
-		for (int i = 0;; i++) {
-			String headerName = connection.getHeaderFieldKey(i);
-			String headerValue = connection.getHeaderField(i);
-			System.out.println("\t\theaderName=" + headerName + "=" + headerValue);
-			if (headerName == null && headerValue == null) {
-				break;
-			}
-			if (headerName == null) {
-			} else {
-				if (headerName.equals("Set-Cookie") && headerValue.startsWith("rtFa=")) {
-					rtFa = headerValue;
-				} else if (headerName.equals("Set-Cookie") && headerValue.startsWith("FedAuth=")) {
-					fedAuth = headerValue;
-				}
-			}
-		}
-		 */
-//		logger.info("rtFa=" + rtFa);
-//		logger.info("fedAuth=" + fedAuth);
-
 		Pair<String, String> result = ImmutablePair.of(rtFa, fedAuth);
-//		System.out.println("loginResult=" + IOUtils.toString(in, "utf-8"));
-
 		return result;
 	}
 

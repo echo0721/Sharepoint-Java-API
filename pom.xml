@@ -53,5 +53,12 @@
 			<artifactId>peter-swing</artifactId>
 			<version>20170929</version>
 		</dependency>
+	 <dependency>
+	  <groupId>com.google.guava</groupId>
+	  <artifactId>guava</artifactId>
+	  <version>23.5-jre</version>
+	  <scope>test</scope>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 </project>
