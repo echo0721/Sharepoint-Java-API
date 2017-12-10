@@ -6,7 +6,7 @@
                 <packaging>*</packaging>
             </packagings>
             <goals>
-                <goal>install</goal>
+                <goal>package</goal>
             </goals>
             <properties>
                 <skipTests>true</skipTests>
@@ -31,7 +31,7 @@
             </packagings>
             <goals>
                 <goal>clean</goal>
-                <goal>install</goal>
+                <goal>package</goal>
             </goals>
             <properties>
                 <skipTests>true</skipTests>

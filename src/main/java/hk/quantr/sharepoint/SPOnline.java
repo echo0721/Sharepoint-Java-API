@@ -16,6 +16,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.logging.Level;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -47,6 +49,17 @@ import org.xml.sax.SAXException;
 public class SPOnline {
 
 	final static Logger logger = Logger.getLogger(SPOnline.class);
+
+	public static void main(String args[]) {
+		try {
+			InputStream input = SPOnline.class.getClassLoader().getResourceAsStream("messages_en_US.properties");
+			Properties prop = new Properties();
+			prop.load(input);
+			System.out.println("version " + prop.getProperty("version") + ", build date " + prop.getProperty("build.date"));
+		} catch (IOException ex) {
+			java.util.logging.Logger.getLogger(SPOnline.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 
 	public static Pair<String, String> login(String username, String password, String domain) {
 		username = StringEscapeUtils.escapeXml11(username);
