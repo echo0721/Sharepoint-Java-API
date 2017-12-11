@@ -22,7 +22,11 @@ public class AzureFunction {
 			return request.createResponse(400, "You need to pass : domain, username and password");
 		} else {
 			Pair<String, String> token = SPOnline.login(username, password, domain);
-			return request.createResponse(200, token.getLeft() + "\n" + token.getRight());
+			if (token == null) {
+				return request.createResponse(200, token.getLeft() + "\n" + token.getRight());
+			} else {
+				return request.createResponse(403, "Authentication failed");
+			}
 		}
 	}
 
