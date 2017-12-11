@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.mcheung63</groupId>
 	<artifactId>Sharepoint-Java-API</artifactId>
-	<version>1.1</version>
+	<version>1.2</version>
 	<packaging>jar</packaging>
 	<url>http://www.quantr.hk</url>
 	<description>Sharepoint Java API Library</description>
@@ -32,22 +32,49 @@
 				<functionAppName>quantr-sharepointonline</functionAppName>
 				<functionAppRegion>eastasia</functionAppRegion>
 			</properties>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<artifactId>maven-resources-plugin</artifactId>
+							<version>3.0.2</version>
+						</plugin>
+						<plugin>
+							<groupId>com.microsoft.azure</groupId>
+							<artifactId>azure-functions-maven-plugin</artifactId>
+							<version>0.1.8</version>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+				<plugins>
+					<plugin>
+						<groupId>com.microsoft.azure</groupId>
+						<artifactId>azure-functions-maven-plugin</artifactId>
+						<configuration>
+							<resourceGroup>java-functions-group</resourceGroup>
+							<appName>${functionAppName}</appName>
+							<region>${functionAppRegion}</region>
+							<appSettings>
+								<property>
+									<name>FUNCTIONS_EXTENSION_VERSION</name>
+									<value>beta</value>
+								</property>
+							</appSettings>
+						</configuration>
+						<executions>
+							<execution>
+								<id>package-functions</id>
+								<goals>
+									<goal>package</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.0.2</version>
-				</plugin>
-				<plugin>
-					<groupId>com.microsoft.azure</groupId>
-					<artifactId>azure-functions-maven-plugin</artifactId>
-					<version>0.1.8</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -71,29 +98,6 @@
 								</manifest>
 							</archive>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.microsoft.azure</groupId>
-				<artifactId>azure-functions-maven-plugin</artifactId>
-				<configuration>
-					<resourceGroup>java-functions-group</resourceGroup>
-					<appName>${functionAppName}</appName>
-					<region>${functionAppRegion}</region>
-					<appSettings>
-						<property>
-							<name>FUNCTIONS_EXTENSION_VERSION</name>
-							<value>beta</value>
-						</property>
-					</appSettings>
-				</configuration>
-				<executions>
-					<execution>
-						<id>package-functions</id>
-						<goals>
-							<goal>package</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>

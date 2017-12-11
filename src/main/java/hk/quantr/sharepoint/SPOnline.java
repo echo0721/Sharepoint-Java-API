@@ -56,6 +56,7 @@ public class SPOnline {
 			Properties prop = new Properties();
 			prop.load(input);
 			System.out.println("version " + prop.getProperty("version") + ", build date " + prop.getProperty("build.date"));
+			input.close();
 		} catch (IOException ex) {
 			java.util.logging.Logger.getLogger(SPOnline.class.getName()).log(Level.SEVERE, null, ex);
 		}
