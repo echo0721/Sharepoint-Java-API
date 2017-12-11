@@ -15,7 +15,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class AzureFunction {
 
 	@FunctionName("getToken")
-	public HttpResponseMessage<String> getToken(@HttpTrigger(name = "req", methods = {"get", "post"}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request, final ExecutionContext context) {
+	public HttpResponseMessage<String> getToken(@HttpTrigger(name = "req", methods = {"get"}, authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request, final ExecutionContext context) {
 		context.getLogger().info("hk.quantr.sharepoint.AzureFunction::getToken()");
 		String domain = getParameter(request, "domain");
 		String username = getParameter(request, "username");
@@ -26,7 +26,7 @@ public class AzureFunction {
 		} else {
 			Pair<String, String> token = SPOnline.login(username, password, domain);
 			if (token == null) {
-				return request.createResponse(403, "Authentication failed");
+				return request.createResponse(403, "Authentication failed " + domain + ", " + username + ", " + password);
 			} else {
 				return request.createResponse(200, token.getLeft() + "\n" + token.getRight());
 			}
@@ -49,8 +49,14 @@ public class AzureFunction {
 	}
 
 	String getParameter(HttpRequestMessage<Optional<String>> request, String name) {
-		String query = request.getQueryParameters().get(name);
-		String para = request.getBody().orElse(query);
+		String para = request.getQueryParameters().get(name);
+//		String para = request.getBody().orElse(query);
 		return para;
+
+//		if (query == null) {
+//			return request.getHeaders().get(name);
+//		} else {
+//			return query;
+//		}
 	}
 }

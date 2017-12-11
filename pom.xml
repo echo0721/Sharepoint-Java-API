@@ -31,6 +31,7 @@
 				<version>${project.version}</version>
 				<functionAppName>quantr-sharepointonline</functionAppName>
 				<functionAppRegion>eastasia</functionAppRegion>
+				<maven.test.skip>true</maven.test.skip>
 			</properties>
 			<build>
 				<pluginManagement>
