@@ -51,14 +51,22 @@ public class SPOnline {
 	final static Logger logger = Logger.getLogger(SPOnline.class);
 
 	public static void main(String args[]) {
-		try {
-			InputStream input = SPOnline.class.getClassLoader().getResourceAsStream("messages_en_US.properties");
-			Properties prop = new Properties();
-			prop.load(input);
-			System.out.println("version " + prop.getProperty("version") + ", build date " + prop.getProperty("build.date"));
-			input.close();
-		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(SPOnline.class.getName()).log(Level.SEVERE, null, ex);
+		if (args.length == 3) {
+			Pair<String, String> token = SPOnline.login(args[0], args[1], args[2]);
+			if (token != null) {
+				System.out.println(token.getLeft());
+				System.out.println(token.getRight());
+			}
+		} else {
+			try {
+				InputStream input = SPOnline.class.getClassLoader().getResourceAsStream("messages_en_US.properties");
+				Properties prop = new Properties();
+				prop.load(input);
+				System.out.println("version " + prop.getProperty("version") + ", build date " + prop.getProperty("build.date"));
+				input.close();
+			} catch (IOException ex) {
+				java.util.logging.Logger.getLogger(SPOnline.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
 	}
 
