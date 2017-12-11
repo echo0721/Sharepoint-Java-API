@@ -40,6 +40,16 @@ You have to encode it yourself, like this
 String jsonString = SPOnline.get(token, serverInfo.domain, serverInfo.path + "/_api/web/lists?$select=ID,Title&$filter=" + URLEncoder.encode("basetype eq 1", "utf-8") + "&$orderby=title");
 ```
 
+## Azure functions
+
+This library support deploy to Azure function, run this command
+
+```
+az login
+mvn -P azure package azure-functions:package
+mvn -P azure azure-functions:deploy
+```
+
 ## Author
 My name is Peter, http://peter.quantr.hk , if you have troubles, please email me peter@quantr.hk
 
