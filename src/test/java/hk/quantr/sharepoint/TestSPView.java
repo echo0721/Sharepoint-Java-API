@@ -5,11 +5,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
@@ -18,7 +20,7 @@ import org.junit.Test;
  * @author Peter <peter@quantr.hk>
  */
 public class TestSPView {
-	
+
 	@Test
 	public void test1() {
 		try {
@@ -33,11 +35,33 @@ public class TestSPView {
 				String formDigestValue = json.getJSONObject("d").getJSONObject("GetContextWebInformation").getString("FormDigestValue");
 				System.out.println("FormDigestValue=" + formDigestValue);
 
-				// get fields in a specific
-				jsonString = SPOnline.get(token, domain, "/test/_api/web/lists/GetByTitle('doclib1')/views(4DBF612B-E3F9-46F2-87CC-FFC8C16CB943)");
+				// print all view names
+				jsonString = SPOnline.get(token, domain, "/test/_api/web/lists/GetByTitle('doclib1')/views");
+				if (jsonString != null) {
+					json = new JSONObject(jsonString);
+					JSONArray arr = json.getJSONObject("d").getJSONArray("results");
+					for (int x = 0; x < arr.length(); x++) {
+						System.out.println(arr.getJSONObject(x).getString("Title"));
+					}
+				}
+
+				// get specific view
+				jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/views/getbytitle('" + SPOnline.escapeSharePointUrl("peter view呀") + "')");
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 				}
+
+				// get all fields of a specific view
+				jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/views/getbytitle('" + SPOnline.escapeSharePointUrl("peter view呀") + "')/ViewFields");
+				if (jsonString != null) {
+					System.out.println(CommonLib.prettyFormatJson(jsonString));
+					json = new JSONObject(jsonString);
+					JSONArray arr = json.getJSONObject("d").getJSONObject("Items").getJSONArray("results");
+					for (int x = 0; x < arr.length(); x++) {
+						System.out.println(arr.getString(x));
+					}
+				}
+
 			} else {
 				System.err.println("Login failed");
 			}

@@ -342,4 +342,8 @@ public class SPOnline {
 		}
 		return null;
 	}
+	
+	public static String escapeSharePointUrl(String path) {
+		return path.replaceAll(" ", "%20");
+	}
 }
