@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.mcheung63</groupId>
 	<artifactId>Sharepoint-Java-API</artifactId>
-	<version>1.3</version>
+	<version>1.4</version>
 	<packaging>jar</packaging>
 	<url>http://www.quantr.hk</url>
 	<description>Sharepoint Java API Library</description>
@@ -11,7 +11,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<build.date>${maven.build.timestamp}</build.date>
+		<version>${project.version}</version>
 	</properties>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.9.RELEASE</version>
+	</parent>
 	<profiles>
 		<profile>
 			<id>dev</id>
@@ -20,9 +27,42 @@
 			</activation>
 			<properties>
 				<profileName>dev</profileName>
-				<build.date>${maven.build.timestamp}</build.date>
-				<version>${project.version}</version>
 			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>package-jar-with-dependencies</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<appendAssemblyId>false</appendAssemblyId>
+									<descriptorRefs>
+										<descriptorRef>jar-with-dependencies</descriptorRef>
+									</descriptorRefs>
+									<archive>
+										<manifest>
+											<mainClass>hk.quantr.sharepoint.SPOnline</mainClass>
+										</manifest>
+									</archive>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+			</build>
 		</profile>
 		<profile>
 			<id>azure</id>
@@ -71,71 +111,89 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<overwrite>true</overwrite>
+									<outputDirectory>${project.build.directory}/azure-functions/${functionAppName}</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.basedir}</directory>
+											<includes>
+												<include>host.json</include>
+												<include>local.settings.json</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>spring</id>
+			<properties>
+				<profileName>spring</profileName>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>package-jar-with-dependencies</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<appendAssemblyId>false</appendAssemblyId>
+									<descriptorRefs>
+										<descriptorRef>jar-with-dependencies</descriptorRef>
+									</descriptorRefs>
+									<archive>
+										<manifest>
+											<mainClass>hk.quantr.sharepoint.SpringController</mainClass>
+										</manifest>
+									</archive>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>repackage</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+			</build>
+		</profile>
 	</profiles>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<id>package-jar-with-dependencies</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<appendAssemblyId>false</appendAssemblyId>
-							<descriptorRefs>
-								<descriptorRef>jar-with-dependencies</descriptorRef>
-							</descriptorRefs>
-							<archive>
-								<manifest>
-									<mainClass>hk.quantr.sharepoint.SPOnline</mainClass>
-								</manifest>
-							</archive>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<overwrite>true</overwrite>
-							<outputDirectory>${project.build.directory}/azure-functions/${functionAppName}
-							</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.basedir}</directory>
-									<includes>
-										<include>host.json</include>
-										<include>local.settings.json</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-	</build>
+	
+	
 	<dependencies>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -188,6 +246,10 @@
 			<groupId>com.microsoft.azure</groupId>
 			<artifactId>azure-functions-java-core</artifactId>
 			<version>[1.0.0-beta-1,1.0.0)</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 	</dependencies>
 </project>
