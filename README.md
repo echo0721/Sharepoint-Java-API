@@ -42,7 +42,7 @@ String jsonString = SPOnline.get(token, serverInfo.domain, serverInfo.path + "/_
 
 ## Azure functions
 
-This library support deploy to Azure function, run this command
+This library support deploy to Azure function, run this command to deploy to azure. Then browse to https://quantr-sharepointonline.azurewebsites.net/api/getToken?username=peter@quantr.hk&password=xxx&domain=quantr
 
 ```
 az login
@@ -52,7 +52,7 @@ mvn -P azure azure-functions:deploy
 		
 ## Spring boot
 
-This library support spring boot, you can pack the jar by the following command and run the jar by "ava -jar target/Sharepoint-Java-API-XX.jar" so the embedded server will listen to port 8080
+This library support spring boot, you can pack the jar by the following command and run the jar by "ava -jar target/Sharepoint-Java-API-XX.jar" so the embedded server will listen to port 7654. Finally, you can browse to localhost:7654/getToken?domain=quantr&username=peter@quantr.hk&password=xxx
 
 ```
 mvn -P spring clean package
