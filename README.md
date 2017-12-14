@@ -57,6 +57,8 @@ This library support spring boot, you can pack the jar by the following command 
 ```
 mvn -P spring clean package
 ```
+		
+!!! If you have this exception "java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty" during executing the jar, run this command "sudo update-ca-certificates -f"
 
 ## Author
 My name is Peter, http://peter.quantr.hk , if you have troubles, please email me peter@quantr.hk
