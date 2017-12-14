@@ -49,6 +49,14 @@ az login
 mvn -P azure package azure-functions:package
 mvn -P azure azure-functions:deploy
 ```
+		
+## Spring boot
+
+This library support spring boot, you can pack the jar by the following command and run the jar by "ava -jar target/Sharepoint-Java-API-XX.jar" so the embedded server will listen to port 8080
+
+```
+mvn -P spring clean package
+```
 
 ## Author
 My name is Peter, http://peter.quantr.hk , if you have troubles, please email me peter@quantr.hk
