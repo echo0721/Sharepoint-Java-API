@@ -48,20 +48,22 @@ public class TestSPView {
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 				}
-//
-//				// get all fields of a specific view
-//				jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/views/getbytitle('" + SPOnline.escapeSharePointUrl("peter view呀") + "')/ViewFields");
-//				if (jsonString != null) {
-//					System.out.println(CommonLib.prettyFormatJson(jsonString));
-//					json = new JSONObject(jsonString);
-//					JSONArray arr = json.getJSONObject("d").getJSONObject("Items").getJSONArray("results");
-//					for (int x = 0; x < arr.length(); x++) {
-//						System.out.println(arr.getString(x));
-//					}
-//				}
 
-				// get items of a specific view
-				jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/views/getbytitle('" + SPOnline.escapeSharePointUrl("peter view呀") + "')/items");
+				// get all fields of a specific view
+				jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/views/getbytitle('" + SPOnline.escapeSharePointUrl("peter view呀") + "')/ViewFields");
+				String items = "";
+				if (jsonString != null) {
+					System.out.println(CommonLib.prettyFormatJson(jsonString));
+					json = new JSONObject(jsonString);
+					JSONArray arr = json.getJSONObject("d").getJSONObject("Items").getJSONArray("results");
+					for (int x = 0; x < arr.length(); x++) {
+						System.out.println(arr.getString(x));
+						items += arr.getString(x) + ",";
+					}
+				}
+
+				// get all fields
+				jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/fields");
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 //					json = new JSONObject(jsonString);
@@ -69,8 +71,12 @@ public class TestSPView {
 //					for (int x = 0; x < arr.length(); x++) {
 //						System.out.println(arr.getString(x));
 //					}
-				} else {
-					System.out.println("fuck");
+				} 
+				
+				// get items of a specific view
+				jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,DocIcon,Modified,Editor/Title&$expand=Editor");
+				if (jsonString != null) {
+					System.out.println(CommonLib.prettyFormatJson(jsonString));
 				}
 			} else {
 				System.err.println("Login failed");
