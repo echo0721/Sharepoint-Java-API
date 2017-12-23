@@ -61,10 +61,10 @@ public class TestSPView {
 						String fieldName = arr.getString(x);
 						System.out.println(fieldName);
 						if (fieldtypes.get(fieldName) == 12) {
-							query += arr.getString(x) + "/Title,";
-							expand += arr.getString(x) + ",";
+							query += fieldName + "/Title,";
+							expand += fieldName + ",";
 						} else {
-							query += arr.getString(x) + ",";
+							query += fieldName + ",";
 						}
 					}
 				}
