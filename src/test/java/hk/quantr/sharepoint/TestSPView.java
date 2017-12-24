@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
@@ -73,6 +74,7 @@ public class TestSPView {
 						}
 					}
 				}
+				query += "UniqueId,";
 
 				if (query.endsWith(",")) {
 					query = query.substring(0, query.length() - 1);
@@ -87,6 +89,16 @@ public class TestSPView {
 				jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/items?$select=" + query + expand);
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
+				}
+
+				// get files of a specific view
+				//jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,DocIcon,Modified,Editor/Title&$expand=Editor");
+				//jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/files?$Scope=0");
+				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/test/doclib1')/files?$select=UniqueId&" + URLEncoder.encode("$filter=UniqueId eq '8294b14d-45b5-4069-971a-848ed013d799'", "utf8"));
+				if (jsonString != null) {
+					System.out.println(CommonLib.prettyFormatJson(jsonString));
+				} else {
+					System.err.println("Error");
 				}
 			} else {
 				System.err.println("Login failed");
