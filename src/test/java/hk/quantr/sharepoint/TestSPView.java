@@ -91,12 +91,18 @@ public class TestSPView {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 				}
 
-				// get files of a specific view
-				//jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,DocIcon,Modified,Editor/Title&$expand=Editor");
-				//jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/files?$Scope=0");
-				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/test/doclib1')/files?$select=UniqueId&" + URLEncoder.encode("$filter=UniqueId eq '8294b14d-45b5-4069-971a-848ed013d799'", "utf8"));
+				// get file by specific an uniqueId
+				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/test/doclib1')/files?$filter=" + URLEncoder.encode("UniqueId eq guid'8294b14d-45b5-4069-971a-848ed013d799'", "utf8"));
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
+				} else {
+					System.err.println("Error");
+				}
+				
+				// download file
+				jsonString = SPOnline.get(token, domain, "test/doclib1/quantr-logo.png");
+				if (jsonString != null) {
+					System.out.println(jsonString);
 				} else {
 					System.err.println("Error");
 				}

@@ -237,11 +237,18 @@ public class SPOnline {
 	}
 
 	public static String get(Pair<String, String> token, String url) {
+//		return get(token, url, false);
+//	}
+//
+//	public static String get(Pair<String, String> token, String url, boolean download) {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		try {
 			HttpGet getRequest = new HttpGet(url);
 			getRequest.addHeader("Cookie", token.getLeft() + ";" + token.getRight());
 			getRequest.addHeader("accept", "application/json;odata=verbose");
+//			if (download) {
+//				getRequest.addHeader("binaryStringResponseBody", "true");
+//			}
 			HttpResponse response = httpClient.execute(getRequest);
 			if (response.getStatusLine().getStatusCode() == 200) {
 				return IOUtils.toString(response.getEntity().getContent(), "utf-8");
@@ -266,6 +273,10 @@ public class SPOnline {
 	public static String get(Pair<String, String> token, String domain, String path) {
 		return get(token, "https://" + domain + ".sharepoint.com/" + path);
 	}
+
+//	public static String download(Pair<String, String> token, String domain, String path) {
+//		return get(token, "https://" + domain + ".sharepoint.com/" + path, true);
+//	}
 
 	public static String post(Pair<String, String> token, String domain, String path, String data, String formDigestValue) {
 		return post(token, domain, path, data, formDigestValue, false);
