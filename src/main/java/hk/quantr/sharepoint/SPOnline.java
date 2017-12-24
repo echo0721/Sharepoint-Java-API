@@ -50,6 +50,13 @@ public class SPOnline {
 
 	final static Logger logger = Logger.getLogger(SPOnline.class);
 
+	static {
+		java.util.logging.Logger.getLogger("httpclient.wire.header").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("httpclient.wire.content").setLevel(java.util.logging.Level.OFF);
+		java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
+		Logger.getLogger("org.apache.http").setLevel(org.apache.log4j.Level.OFF);
+	}
+
 	public static void main(String args[]) {
 		if (args.length == 3) {
 			Pair<String, String> token = SPOnline.login(args[0], args[1], args[2]);
