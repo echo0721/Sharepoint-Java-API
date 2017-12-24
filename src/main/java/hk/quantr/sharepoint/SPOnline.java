@@ -51,10 +51,8 @@ public class SPOnline {
 	final static Logger logger = Logger.getLogger(SPOnline.class);
 
 	static {
-		java.util.logging.Logger.getLogger("httpclient.wire.header").setLevel(java.util.logging.Level.OFF);
-		java.util.logging.Logger.getLogger("httpclient.wire.content").setLevel(java.util.logging.Level.OFF);
-		java.util.logging.Logger.getLogger("org.apache.http").setLevel(java.util.logging.Level.OFF);
-		Logger.getLogger("org.apache.http").setLevel(org.apache.log4j.Level.OFF);
+		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+		System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http", "warn");
 	}
 
 	public static void main(String args[]) {
