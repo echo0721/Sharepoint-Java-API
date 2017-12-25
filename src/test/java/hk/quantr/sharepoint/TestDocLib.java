@@ -39,7 +39,7 @@ public class TestDocLib {
 
 				// get folder by specific an uniqueId
 				ArrayList<String> uniqueIds = new ArrayList();
-				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/test/doclib1')/folders?$select=UniqueId");
+				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/test/doclib1')/folders");
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 					json = new JSONObject(jsonString);
@@ -50,7 +50,7 @@ public class TestDocLib {
 				}
 
 				// get file by specific an uniqueId
-				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/test/doclib1')/files?$select=UniqueId");
+				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/test/doclib1')/files");
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 					json = new JSONObject(jsonString);
@@ -103,9 +103,12 @@ public class TestDocLib {
 				}
 
 				// get items of a specific view
-				//jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,DocIcon,Modified,Editor/Title&$expand=Editor");
 				String filters = "";
-				String url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=" + query + expand + "&$filter=" + URLEncoder.encode("UniqueId eq guid'84ea42c1-abb4-466c-a7b4-532fbaf1515a'", "utf8");
+				String url = "test/_api/web/lists/GetByTitle('doclib1')/items?$filter=" + URLEncoder.encode("GUID eq guid'47e1eab5-c06e-46a3-a100-ab0fa3874416'", "utf8");
+//				url = "test/_api/web/lists/GetByTitle('doclib1')/items?$filter=" + URLEncoder.encode("ID eq 13", "utf8");
+				url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,GUID,UniqueId&$filter=" + URLEncoder.encode("AuthorId eq 11", "utf8");
+				url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,GUID,UniqueId&$filter=" + URLEncoder.encode("UniqueId eq guid'e7ac2b9b-d5e3-4257-a21c-0e2951e83887'", "utf8");
+//				url = "test/_api/web/lists/GetByTitle('doclib1')/items;
 				System.out.println(url);
 				jsonString = SPOnline.get(token, domain, url);
 				if (jsonString != null) {
