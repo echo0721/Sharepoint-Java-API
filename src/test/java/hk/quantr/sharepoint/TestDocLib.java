@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
@@ -19,12 +20,12 @@ import org.junit.Test;
  *
  * @author Peter <peter@quantr.hk>
  */
-public class TestSPView {
+public class TestDocLib {
 
 	@Test
-	public void getAllItemsWithFieldsThatSpecificByView() {
+	public void getItemsFromDocLib() {
 		try {
-			Logger.getLogger(TestSPOnline.class).info("get All Items With Fields That Specific By View");
+			Logger.getLogger(TestSPOnline.class).info("get all items from document library");
 			//String view = "peter view呀";
 			String view = "view1";
 
@@ -36,10 +37,31 @@ public class TestSPView {
 				JSONObject json;
 				String jsonString;
 
-				HashMap<String, Integer> fieldtypes = new HashMap<String, Integer>();
-//				HashMap<String, String> fieldInternalName = new HashMap<String, String>();
+				// get folder by specific an uniqueId
+				ArrayList<String> uniqueIds = new ArrayList();
+				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/test/doclib1')/folders?$select=UniqueId");
+				if (jsonString != null) {
+					System.out.println(CommonLib.prettyFormatJson(jsonString));
+					json = new JSONObject(jsonString);
+					JSONArray arr = json.getJSONObject("d").getJSONArray("results");
+					for (int x = 0; x < arr.length(); x++) {
+						uniqueIds.add(arr.getJSONObject(x).getString("UniqueId"));
+					}
+				}
+
+				// get file by specific an uniqueId
+				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/test/doclib1')/files?$select=UniqueId");
+				if (jsonString != null) {
+					System.out.println(CommonLib.prettyFormatJson(jsonString));
+					json = new JSONObject(jsonString);
+					JSONArray arr = json.getJSONObject("d").getJSONArray("results");
+					for (int x = 0; x < arr.length(); x++) {
+						uniqueIds.add(arr.getJSONObject(x).getString("UniqueId"));
+					}
+				}
 
 				// get all fields
+				HashMap<String, Integer> fieldtypes = new HashMap<String, Integer>();
 				jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/fields");
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
@@ -71,6 +93,7 @@ public class TestSPView {
 					}
 				}
 				query += "UniqueId,";
+				query += "GUID,";
 
 				if (query.endsWith(",")) {
 					query = query.substring(0, query.length() - 1);
@@ -81,26 +104,12 @@ public class TestSPView {
 
 				// get items of a specific view
 				//jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,DocIcon,Modified,Editor/Title&$expand=Editor");
-				System.out.println("test/_api/web/lists/GetByTitle('doclib1')/items?$select=" + query + expand);
-				jsonString = SPOnline.get(token, domain, "test/_api/web/lists/GetByTitle('doclib1')/items?$select=" + query + expand);
+				String filters = "";
+				String url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=" + query + expand + "&$filter=" + URLEncoder.encode("UniqueId eq guid'84ea42c1-abb4-466c-a7b4-532fbaf1515a'", "utf8");
+				System.out.println(url);
+				jsonString = SPOnline.get(token, domain, url);
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
-				}
-
-				// get file by specific an uniqueId
-				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/test/doclib1')/files?$filter=" + URLEncoder.encode("UniqueId eq guid'8294b14d-45b5-4069-971a-848ed013d799'", "utf8"));
-				if (jsonString != null) {
-					System.out.println(CommonLib.prettyFormatJson(jsonString));
-				} else {
-					System.err.println("Error");
-				}
-				
-				// download file
-				jsonString = SPOnline.get(token, domain, "test/doclib1/quantr-logo.png");
-				if (jsonString != null) {
-					System.out.println(jsonString);
-				} else {
-					System.err.println("Error");
 				}
 			} else {
 				System.err.println("Login failed");
