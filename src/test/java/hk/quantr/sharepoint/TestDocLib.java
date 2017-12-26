@@ -109,7 +109,7 @@ public class TestDocLib {
 				url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,GUID,UniqueId&$filter=" + URLEncoder.encode("AuthorId eq 11", "utf8");
 				url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,GUID,UniqueId&$filter=" + URLEncoder.encode("UniqueId eq guid'e7ac2b9b-d5e3-4257-a21c-0e2951e83887'", "utf8");
 				//url = "test/_api/web/lists/GetByTitle('doclib1')/items?$expand=Unique&$filter=" + URLEncoder.encode("Unique/Id eq guid'efee39c7-ae90-434a-9174-9a9bd7411c74'", "utf8");
-				url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=Unique/Id&$expand=Unique";
+				url = "test/_api/web/lists/GetByTitle('doclib1')/items";
 //				url = "test/_api/web/lists/GetByTitle('doclib1')/items;
 				System.out.println(url);
 				jsonString = SPOnline.get(token, domain, url);
