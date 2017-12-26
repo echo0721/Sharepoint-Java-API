@@ -40,13 +40,15 @@ public class TestDocLib {
 
 //				// get folder by specific an uniqueId
 				ArrayList<String> guids = new ArrayList();
-				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/" + site + "/" + docLib + "')/folders$expand=ListItemAllFields");
+				jsonString = SPOnline.get(token, domain, "test/_api/web/getfolderbyserverrelativeurl('/" + site + "/" + docLib + "')/folders?$expand=ListItemAllFields&$filter=" + URLEncoder.encode("filterListItemAllFields/GUID ne null", "utf-8"));
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 					json = new JSONObject(jsonString);
 					JSONArray arr = json.getJSONObject("d").getJSONArray("results");
 					for (int x = 0; x < arr.length(); x++) {
-						guids.add(arr.getJSONObject(x).getString("UniqueId"));
+						String guid = arr.getJSONObject(x).getJSONObject("ListItemAllFields").getString("GUID");
+						System.out.println("guid=" + guid);
+						guids.add(guid);
 					}
 				}
 
@@ -63,11 +65,18 @@ public class TestDocLib {
 					}
 				}
 
+				String filters = "";
 				for (String guid : guids) {
-					String url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=file,GUID&$filter=" + URLEncoder.encode("GUID eq guid'" + guid + "'", "utf8");
-					jsonString = SPOnline.get(token, domain, url);
-					System.out.println(guid + " = " + CommonLib.prettyFormatJson(jsonString));
+//					String url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=file,GUID&$filter=" + URLEncoder.encode("GUID eq guid'" + guid + "'", "utf8");
+					if (!filters.equals("")) {
+						filters += " or";
+					}
+					filters += " GUID eq guid'" + guid + "'";
+
+//					jsonString = SPOnline.get(token, domain, url);
+//					System.out.println(guid + " = " + CommonLib.prettyFormatJson(jsonString));
 				}
+				System.out.println(filters);
 
 //				// get all fields
 //				HashMap<String, Integer> fieldtypes = new HashMap<String, Integer>();
@@ -118,13 +127,13 @@ public class TestDocLib {
 //				url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,GUID,UniqueId&$filter=" + URLEncoder.encode("AuthorId eq 11", "utf8");
 //				url = "test/_api/web/lists/GetByTitle('doclib1')/items?$select=LinkFilename,GUID,UniqueId&$filter=" + URLEncoder.encode("UniqueId eq guid'e7ac2b9b-d5e3-4257-a21c-0e2951e83887'", "utf8");
 //				//url = "test/_api/web/lists/GetByTitle('doclib1')/items?$expand=Unique&$filter=" + URLEncoder.encode("Unique/Id eq guid'efee39c7-ae90-434a-9174-9a9bd7411c74'", "utf8");
-//				url = "test/_api/web/lists/GetByTitle('doclib1')/items";
+				String url = "test/_api/web/lists/GetByTitle('doclib1')/items?$filters=" + URLEncoder.encode(filters, "utf-8");
 ////				url = "test/_api/web/lists/GetByTitle('doclib1')/items;
 //				System.out.println(url);
-//				jsonString = SPOnline.get(token, domain, url);
-//				if (jsonString != null) {
-//					System.out.println(CommonLib.prettyFormatJson(jsonString));
-//				}
+				jsonString = SPOnline.get(token, domain, url);
+				if (jsonString != null) {
+					System.out.println(CommonLib.prettyFormatJson(jsonString));
+				}
 			} else {
 				System.err.println("Login failed");
 			}
