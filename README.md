@@ -9,8 +9,8 @@ Calling SharePoint restful api using java is not that simple, first need to get 
 ## Who are we
 We are quantr development team, we are a sharepoint dev company http://www.quantr.hk
 
-## Example
-https://github.com/quantr-research/Sharepoint-Java-API/blob/master/src/test/java/hk/quantr/sharepoint/TestSPOnline.java
+## Examples
+https://gitlab.com/quantr/sharepoint/Sharepoint-Java-API/tree/master/src/test/java/hk/quantr/sharepoint
 
 ## Compile
 
