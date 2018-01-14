@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,21 +19,24 @@ import org.junit.Test;
  *
  * @author Peter <mcheung63@hotmail.com>
  */
-public class TestSiteGroup {
+public class GetMultipleUsersFromList {
 
 	@Test
 	public void testUpload() {
 		try {
+			// This example is retrieving multiple users from a "Person or group" column of a specific list. And that column is set to "Allow multiple selections".
 			List<String> lines = IOUtils.readLines(new FileReader(System.getProperty("user.home") + File.separator + "password.txt"));
 			String password = lines.get(0);
 			String domain = "quantr";
 			Pair<String, String> token = SPOnline.login("wordpress@quantr.hk", password, domain);
 			if (token != null) {
 				String jsonString = SPOnline.post(token, domain, "/_api/contextinfo", null, null);
+				System.out.println(CommonLib.prettyFormatJson(jsonString));
 				JSONObject json = new JSONObject(jsonString);
 				String formDigestValue = json.getJSONObject("d").getJSONObject("GetContextWebInformation").getString("FormDigestValue");
+				System.out.println("FormDigestValue=" + formDigestValue);
 
-				jsonString = SPOnline.get(token, domain, "/quantr-dev-central/_api/web/sitegroups?$select=Title");
+				jsonString = SPOnline.get(token, domain, "/quantr-dev-central/_api/web/lists/GetByTitle('Projects')/items?$select=Owner/EMail&$OrderBy=Title&$expand=Owner&$filter=" + URLEncoder.encode("Owner/EMail eq 'peter@quantr.hk'", "utf-8"));
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 				}
@@ -40,9 +44,9 @@ public class TestSiteGroup {
 				System.err.println("Login failed");
 			}
 		} catch (FileNotFoundException ex) {
-			Logger.getLogger(TestSiteGroup.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(GetMultipleUsersFromList.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (IOException ex) {
-			Logger.getLogger(TestSiteGroup.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(GetMultipleUsersFromList.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 }
