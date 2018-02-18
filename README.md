@@ -57,6 +57,12 @@ This library support spring boot, you can pack the jar by the following command 
 ```
 mvn -P spring clean package
 ```
+
+To debug the spring boot, run
+
+```
+mvn -P spring spring-boot:run
+```
 		
 !!! If you have this exception "java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty" during executing the jar, run this command "sudo update-ca-certificates -f"
 
