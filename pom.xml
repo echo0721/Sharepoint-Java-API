@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.mcheung63</groupId>
 	<artifactId>Sharepoint-Java-API</artifactId>
-	<version>1.4</version>
+	<version>1.5</version>
 	<packaging>jar</packaging>
 	<url>http://www.quantr.hk</url>
 	<description>Sharepoint Java API Library</description>
