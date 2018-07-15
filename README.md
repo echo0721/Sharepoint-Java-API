@@ -14,9 +14,9 @@ https://gitlab.com/quantr/sharepoint/Sharepoint-Java-API/tree/master/src/test/ja
 
 ## Compile
 
-This library rely on peter-swing library https://github.com/mcheung63/peter-swing
+This library rely on peter-swing library https://gitlab.com/mcheung63/peter-swing
 
-1. git clone https://github.com/mcheung63/peter-swing.git
+1. git clone https://gitlab.com/mcheung63/peter-swing.git
 2. cd peter-swing
 3. mvn clean install
 4. cd ..
