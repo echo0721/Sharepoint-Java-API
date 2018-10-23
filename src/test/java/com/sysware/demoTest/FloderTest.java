@@ -3,20 +3,27 @@ package com.sysware.demoTest;
 import com.sysware.entity.vo.OfficeRestVo;
 import com.sysware.service.office.OfficeRestService;
 import com.sysware.service.office.OfficeRestServiceImpl;
-import org.apache.commons.io.FileUtils;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
 
 public class FloderTest {
     OfficeRestVo vo = new OfficeRestVo();
+    OfficeRestService service = new OfficeRestServiceImpl();
     @Before
     public void setUp() throws Exception {
 
         vo.setGroupId("20181023");
+    }
+
+    @Test
+    public void viewFile() {
+
+        vo.setDocName("sysware1.docx");
+        vo.setUrlStuff("/Properties");
+        service.viewFileInfo(vo);
+
     }
 
     @Test
@@ -35,12 +42,21 @@ public class FloderTest {
     @Test
     public void uploadFile() {
         OfficeRestService service = new OfficeRestServiceImpl();
-//        String filepath = "F:/sharePointTestFile/test001.docx";
-        String filepath = "F:/sharePointTestFile/test002.doc";
+        String filepath = "F:/sharePointTestFile/test001.docx";
+//        String filepath = "F:/sharePointTestFile/test002.doc";
         vo.setData(filepath);
 
         Double random = Math.random()*50;
-        vo.setDocName("sysware"+ random.intValue()+".doc");
+        vo.setDocName("sysware"+ random.intValue()+".docx");
+        service.addFile(vo);
+
+    }
+    @Test
+    public void importFile() {
+        OfficeRestService service = new OfficeRestServiceImpl();
+        String filepath = "F:/sharePointTestFile/test001.docx";
+        vo.setData(filepath);
+        vo.setDocName("sysware1.docx");
         service.addFile(vo);
 
     }

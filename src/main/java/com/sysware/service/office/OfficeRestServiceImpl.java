@@ -48,6 +48,23 @@ public class OfficeRestServiceImpl implements OfficeRestService {
     }
 
     @Override
+    public String viewFileInfo(OfficeRestVo vo) {
+
+
+       String url = "_api/Web/GetFileByServerRelativePath('/syswareLib/"+vo.getGroupId()+"/"+vo.getDocName()+"')";
+        url += vo.getUrlStuff(); ///Properties"
+
+         url = "/_api/Web/GetFileByServerRelativePath('/syswareLib/20181023/test001.docx')/Name";
+        ConnectVo postParam = this.getPostParam(vo);
+        postParam.setUrl(url);
+        String jsonString = this.post(postParam);
+        if (jsonString != null) {
+            System.out.println(CommonLib.prettyFormatJson(jsonString));
+        }
+        return null;
+    }
+
+    @Override
     public String createFloder(OfficeRestVo vo) {
 //        url: http://site url/_api/web/folders
 //        method: POST

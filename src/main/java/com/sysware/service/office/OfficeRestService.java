@@ -5,6 +5,8 @@ import com.sysware.entity.vo.OfficeRestVo;
 
 public interface OfficeRestService {
 
+    String viewFileInfo(OfficeRestVo vo);
+
     /**
      * 创建文件夹
      * @param vo
@@ -14,24 +16,28 @@ public interface OfficeRestService {
 
     /**
      * 新建文档
+     * 删除权限集成，只保留创建人所有权
      * @return
      */
     String addFile(OfficeRestVo vo);
 
     /**
      *  导入新文档
+     *  删除权限继承，只保留导入人所有权
      * @return
      */
     String importNewFile(OfficeRestVo vo);
 
     /**
      * 导入文档，覆盖当前存在文档
+     * 生成一个新版本
      * @return
      */
     String importFile(OfficeRestVo vo);
 
     /**
      * 设置文档权限
+     * 包括 查看，编辑，完全控制
      * @return
      */
     String setPermissions(OfficeRestVo vo);

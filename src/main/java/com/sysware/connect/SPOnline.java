@@ -304,33 +304,30 @@ public class SPOnline {
 		}
 		return null;
 	}
+
+	/**
+	 *  上传文件
+	 * @param token   SharePoint 登陆令牌
+	 * @param domain  域名
+	 * @param path	   请求路径
+	 * @param file	   上传的附件
+	 * @param formDigestValue  SharePoint请求验证
+	 * @return  SharePoint 请求返回数据
+	 */
 	public static String uploadFile(Pair<String, String> token, String domain, String path, File file, String formDigestValue) {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		try {
-
-
 			HttpPost postRequest = new HttpPost("https://" + domain + ".sharepoint.com/" + path);
 			postRequest.addHeader("Cookie", token.getLeft() + ";" + token.getRight());
 			System.out.println(token.getLeft() + ";" + token.getRight());
 			postRequest.addHeader("accept", "application/json;odata=verbose");
 		//	postRequest.addHeader("content-type", "application/json;odata=verbose");
 			postRequest.addHeader("X-RequestDigest", formDigestValue);
-		//	postRequest.addHeader("IF-MATCH", "*");
-
-//			postRequest.addHeader("content-length", String.valueOf(file.length()));
 
 			List<NameValuePair> nvps = new ArrayList<>();
 			if (file != null) {
-//				MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-////				postRequest.setEntity(input);
-//				multipartEntityBuilder.addBinaryBody("file",file);
-//				multipartEntityBuilder.addTextBody("comment", "this is comment");
-//				HttpEntity httpEntity = multipartEntityBuilder.build();
-
 				HttpEntity httpEntity = new FileEntity(file);
-
 				postRequest.setEntity(httpEntity);
-
 			}
 
 			HttpResponse response = httpClient.execute(postRequest);

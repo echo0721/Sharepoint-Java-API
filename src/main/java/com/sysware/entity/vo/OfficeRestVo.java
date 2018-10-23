@@ -19,5 +19,6 @@ public class OfficeRestVo {
     private String newName; // 重命名的新名称
     private String version ;// 版本号
     private String data ;//请求data
+    private String urlStuff ; //url后的参数
 
 }
