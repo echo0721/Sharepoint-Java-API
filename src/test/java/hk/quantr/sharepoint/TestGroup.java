@@ -1,27 +1,25 @@
 // License : Apache License Version 2.0  https://www.apache.org/licenses/LICENSE-2.0
 package hk.quantr.sharepoint;
 
-import com.google.common.net.UrlEscapers;
 import com.peterswing.CommonLib;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Peter <mcheung63@hotmail.com>
  */
-public class TestHavePermissions {
+public class TestGroup {
 
 	/*
 	 * check if the user can access site https://quantr.sharepoint.com/quantr-dev-central, if i remove the user from the owner group, api return false. If the user is in owner group, api return true. "quantr-dev-central" is my subsite name.
@@ -84,7 +82,11 @@ public class TestHavePermissions {
 				JSONObject json = new JSONObject(jsonString);
 				String formDigestValue = json.getJSONObject("d").getJSONObject("GetContextWebInformation").getString("FormDigestValue");
 
-				jsonString = SPOnline.get(token, domain, "/_api/web/doesuserhavepermissions('" + UrlEscapers.urlFragmentEscaper().escape("/20181014/YYY.docx") + "')?@v=" + URLEncoder.encode("{'High':'1', 'Low':'1'}", "utf-8"));
+				String endpointUri =  "/_api/web/sitegroups/getbyname('20181014')/id";
+
+				  jsonString = SPOnline.post(token, domain, endpointUri, "", formDigestValue);
+
+//				jsonString = SPOnline.get(token, domain, endpointUri );
 				if (jsonString != null) {
 					System.out.println(CommonLib.prettyFormatJson(jsonString));
 				} else {
@@ -94,9 +96,9 @@ public class TestHavePermissions {
 				System.err.println("Login failed");
 			}
 		} catch (FileNotFoundException ex) {
-			Logger.getLogger(TestHavePermissions.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(TestGroup.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (IOException ex) {
-			Logger.getLogger(TestHavePermissions.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(TestGroup.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 }

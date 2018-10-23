@@ -25,10 +25,13 @@ public class TestSPOnline {
 	@Test
 	public void test1() {
 		try {
-			List<String> lines = IOUtils.readLines(new FileReader(System.getProperty("user.home") + File.separator + "password.txt"));
-			String password = lines.get(0);
-			String domain = "quantr";
-			Pair<String, String> token = SPOnline.login("wordpress@quantr.hk", password, domain);
+			List<String> lines = IOUtils.readLines(new FileReader(   "F://password.txt"));
+			String password = "Me123456";
+			String domain = "237226835";
+
+
+
+			Pair<String, String> token = SPOnline.login("zengq@237226835.onmicrosoft.com", password, domain);
 			if (token != null) {
 				String jsonString = SPOnline.post(token, domain, "/_api/contextinfo", null, null);
 				System.out.println(CommonLib.prettyFormatJson(jsonString));

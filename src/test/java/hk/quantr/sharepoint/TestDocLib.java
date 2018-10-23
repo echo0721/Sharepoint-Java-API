@@ -27,13 +27,13 @@ public class TestDocLib {
 		try {
 			Logger.getLogger(TestSPOnline.class).info("get all files with associated items from document library");
 			//String view = "peter view呀";
-			String site = "test";
-			String docLib = "doclib1";
+			String site = "20181014";
+			String docLib = "test";
 
 			List<String> lines = IOUtils.readLines(new FileReader(System.getProperty("user.home") + File.separator + "password.txt"));
 			String password = lines.get(0);
-			String domain = "quantr";
-			Pair<String, String> token = SPOnline.login("wordpress@quantr.hk", password, domain);
+			String domain = "237226835";
+			Pair<String, String> token = SPOnline.login("zengq@237226835.onmicrosoft.com", password, domain);
 			if (token != null) {
 				JSONObject json;
 				String jsonString;

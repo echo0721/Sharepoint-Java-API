@@ -287,6 +287,7 @@ public class SPOnline {
 		try {
 			HttpPost postRequest = new HttpPost("https://" + domain + ".sharepoint.com/" + path);
 			postRequest.addHeader("Cookie", token.getLeft() + ";" + token.getRight());
+			System.out.println(token.getLeft() + ";" + token.getRight());
 			postRequest.addHeader("accept", "application/json;odata=verbose");
 			postRequest.addHeader("content-type", "application/json;odata=verbose");
 			postRequest.addHeader("X-RequestDigest", formDigestValue);

@@ -24,16 +24,19 @@ public class TestDeleteFileInDocLib {
 
 	@Test
 	public void getItemsFromDocLib() {
+
 		try {
 			Logger.getLogger(TestSPOnline.class).info("get all files with associated items from document library");
 			//String view = "peter view呀";
 			String site = "dev";
 			String docLib = "TestDocLib";
 
+			String uniqueId ="ee201bc0-93c9-4ee9-8f74-38a89e68f88d";
+
 			List<String> lines = IOUtils.readLines(new FileReader(System.getProperty("user.home") + File.separator + "password.txt"));
 			String password = lines.get(0);
-			String domain = "quantr";
-			Pair<String, String> token = SPOnline.login("wordpress@quantr.hk", password, domain);
+			String domain = "237226835";
+			Pair<String, String> token = SPOnline.login("zengq@237226835.onmicrosoft.com", password, domain);
 			if (token != null) {
 				JSONObject json;
 				String jsonString;
@@ -46,9 +49,11 @@ public class TestDeleteFileInDocLib {
 				System.out.println("FormDigestValue=" + formDigestValue);
 
 				// delete a file in doc lib
-				jsonString = SPOnline.delete(token, domain, "/dev/_api/web/GetFolderByServerRelativeUrl('/" + site + "/" + docLib + SPOnline.escapeSharePointUrl("/folder 1/Screen Shot 2018-08-31 at 6.55.08 PM.png") + "')", formDigestValue);
+				String path = "_api/web/GetFileByServerRelativeUrl('/20181014/QQQ.docx')" ;
+				jsonString = SPOnline.delete(token, domain,path  , formDigestValue);
 				if (jsonString != null) {
-					System.out.println(CommonLib.prettyFormatJson(jsonString));
+					System.out.println(123213);
+					//System.out.println(CommonLib.prettyFormatJson(jsonString));
 				}
 			} else {
 				System.err.println("Login failed");

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.mcheung63:peter-swing:20180730">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/mcheung63/peter-swing/20180730/peter-swing-20180730.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/mcheung63/peter-swing/20180730/peter-swing-20180730-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/mcheung63/peter-swing/20180730/peter-swing-20180730-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
