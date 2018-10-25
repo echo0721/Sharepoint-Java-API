@@ -2,6 +2,7 @@ package com.sysware.service.office;
 
 import com.peterswing.CommonLib;
 import com.sysware.connect.SPOnline;
+import com.sysware.conver.SPConver;
 import com.sysware.entity.vo.ConnectVo;
 import com.sysware.entity.vo.OfficeRestVo;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +27,10 @@ public class OfficeRestServiceImpl implements OfficeRestService {
         String domain = "237226835";
         //查询eap获得username，password
         String password = "Me123456";
-        String username = "zengq@237226835.onmicrosoft.com";
+        String username = vo.getUsername();
+        if(StringUtils.isNotBlank( vo.getSiteOwner())){
+            username = vo.getSiteOwner();
+        }
 
         Pair<String, String> token = SPOnline.login(username, password, domain);
 
@@ -220,7 +224,24 @@ public class OfficeRestServiceImpl implements OfficeRestService {
 
     @Override
     public String setPermissions(OfficeRestVo vo) {
-        return null;
+
+        String userInfo = this.getUserInfo(vo);
+        String principalId = SPConver.getUserId(userInfo);
+
+        String listItemId = this.getListItemId(vo);
+
+        String targetRoleDefinitionId = this.getTargetRoleDefinitionId(vo);
+
+        String url = "_api/Web/Lists/getByTitle('syswareLib')/items("+listItemId+")";
+        url += "/roleassignments/addroleassignment";
+        ConnectVo postParam = getPostParam(vo);
+
+        String permissionUrl = url +"(principalid='"+principalId+"',roledefid='"+targetRoleDefinitionId+"')";
+        postParam.setUrl(permissionUrl);
+        String post = this.post(postParam);
+        System.out.println("post====="+post);
+
+        return post;
     }
 
     @Override
@@ -240,22 +261,9 @@ public class OfficeRestServiceImpl implements OfficeRestService {
                String permissionUrl = url +"('"+principalId+"')";
                 postParam.setUrl(permissionUrl);
                 String delete = this.delete(postParam);
-                System.out.println(delete);
+                System.out.println("delete===     "+delete);
             }
         }
-
-//        String url = "_api/Web/Lists/getByTitle('syswareLib')/items("+listItemId+")";
-//        url += "/roleassignments/getbyprincipalid";
-//        ConnectVo postParam = getPostParam(vo);
-//        postParam.setUrl(url);
-//        String post = this.post(postParam);
-
-//        if (StringUtils.isNotBlank(post)) {
-//            System.out.println(CommonLib.prettyFormatJson(post));
-//
-//        } else {
-//            System.out.println("null");
-//        }
 
         return null;
     }
@@ -338,5 +346,59 @@ public class OfficeRestServiceImpl implements OfficeRestService {
         }
 
         return ids;
+    }
+
+    @Override
+    public String getUserInfo(OfficeRestVo vo) {
+        //        https://237226835.sharepoint.com//_api/web/siteusers(@v)?@v=%27i%3A0%23.f%7Cmembership%7Czengq%40237226835.onmicrosoft.com%27
+
+        String shareId = vo.getShareId();
+
+        //SharePoint Online 获取用户链接
+//        …/users(@v)?@v='i%3A05%3At%7Cadfs+with+roles%7Cuser%40domain.com'  本地SharePoint的链接
+        String url  = "/_api/web/siteusers(@v)?@v=%27i%3A0%23.f%7Cmembership%7C"+shareId+"%40"+vo.getDomain()+".onmicrosoft.com%27";
+
+        ConnectVo postParam = getPostParam(vo);
+
+        postParam.setUrl(url);
+        String post = this.post(postParam);
+        if (StringUtils.isNotBlank(post)) {
+            System.out.println(CommonLib.prettyFormatJson(post));
+        } else {
+            System.out.println("null");
+        }
+
+        return post;
+    }
+
+    @Override
+    public String getTargetRoleDefinition(OfficeRestVo vo) {
+        String url  = "/_api/web/roledefinitions/getbyname('"+vo.getPermission()+"')";
+
+        ConnectVo postParam = this.getPostParam(vo);
+        postParam.setUrl(url);
+
+        String post = this.post(postParam);
+
+        if (StringUtils.isNotBlank(post)) {
+            System.out.println(CommonLib.prettyFormatJson(post));
+        } else {
+            System.out.println("null");
+        }
+        return post;
+    }
+
+    @Override
+    public String getTargetRoleDefinitionId(OfficeRestVo vo) {
+        String url  = "/_api/web/roledefinitions/getbyname('"+vo.getPermission()+"')/id";
+        ConnectVo postParam = this.getPostParam(vo);
+        postParam.setUrl(url);
+        String post = this.post(postParam);
+        if (StringUtils.isNotBlank(post)) {
+            System.out.println(CommonLib.prettyFormatJson(post));
+        } else {
+            System.out.println("null");
+        }
+        return SPConver.getId(post);
     }
 }

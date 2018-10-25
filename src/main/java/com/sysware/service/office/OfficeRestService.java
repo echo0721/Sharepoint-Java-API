@@ -109,6 +109,32 @@ public interface OfficeRestService {
      */
     String getAllPermission(OfficeRestVo vo);
 
+    /**
+     * 获取文件上的权限id
+     * @param vo
+     * @return
+     */
     List<String> getPrincipalIds(OfficeRestVo vo);
+
+    /**
+     * 获取SharePoint 用户的信息。
+     * 主要用来获取ID,设置权限
+     * @param vo
+     * @return
+     */
+    String getUserInfo(OfficeRestVo vo);
+
+    /**
+     * 获取角色定义
+     * @param vo
+     * @return
+     */
+    String getTargetRoleDefinition(OfficeRestVo vo );
+    /**
+     * 获取角色定义id
+     * @param vo
+     * @return
+     */
+    String getTargetRoleDefinitionId(OfficeRestVo vo );
 
 }
