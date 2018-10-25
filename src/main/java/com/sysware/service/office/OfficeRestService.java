@@ -137,4 +137,6 @@ public interface OfficeRestService {
      */
     String getTargetRoleDefinitionId(OfficeRestVo vo );
 
+    String getRoleDefinitions(OfficeRestVo vo );
+
 }

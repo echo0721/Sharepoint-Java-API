@@ -183,7 +183,6 @@ public class OfficeRestServiceImpl implements OfficeRestService {
         String jsonString = this.post(con);
         if (jsonString != null) {
             System.out.println(CommonLib.prettyFormatJson(jsonString));
-
             // "UniqueId": "52027068-2d67-46fa-ad9b-16cede5f02dd", SharePoint端文件夹id
 //            //    "ServerRelativeUrl": "/syswareLib/20181023/sysware0.docx", 相对路径
 //            //  "Name": "sysware0.docx",
@@ -192,12 +191,11 @@ public class OfficeRestServiceImpl implements OfficeRestService {
 ////             "UIVersionLabel": "1.0",
 ////            Versions  版本查看
 ////            "UIVersionLabel": "2.0",
-
         } else {
             System.out.println("null");
         }
 
-        return null;
+        return jsonString;
     }
 
     @Override
@@ -225,6 +223,7 @@ public class OfficeRestServiceImpl implements OfficeRestService {
     @Override
     public String setPermissions(OfficeRestVo vo) {
 
+        vo.setSimpleName(vo.getShareId());
         String userInfo = this.getUserInfo(vo);
         String principalId = SPConver.getUserId(userInfo);
 
@@ -248,6 +247,13 @@ public class OfficeRestServiceImpl implements OfficeRestService {
     public String delPermissions(OfficeRestVo vo) {
 
         List<String> principalIds = getPrincipalIds(vo);
+
+        OfficeRestVo user =vo;
+        String simpleName = vo.getUsername().split("@")[0];
+        user.setSimpleName(simpleName);
+        String userInfo = this.getUserInfo(user);
+        String userId = SPConver.getUserId(userInfo);
+        principalIds.remove(userId);
         String listItemId = this.getListItemId(vo);
 
         String url = "_api/Web/Lists/getByTitle('syswareLib')/items("+listItemId+")";
@@ -341,8 +347,9 @@ public class OfficeRestServiceImpl implements OfficeRestService {
         for (Object obj : objects) {
             Map<String, Object> json = (HashMap) obj;
             Object id = json.get("PrincipalId");
-
-            ids.add(id.toString());
+            if(id != null){
+                ids.add(id.toString());
+            }
         }
 
         return ids;
@@ -352,11 +359,11 @@ public class OfficeRestServiceImpl implements OfficeRestService {
     public String getUserInfo(OfficeRestVo vo) {
         //        https://237226835.sharepoint.com//_api/web/siteusers(@v)?@v=%27i%3A0%23.f%7Cmembership%7Czengq%40237226835.onmicrosoft.com%27
 
-        String shareId = vo.getShareId();
+        String simpleName = vo.getSimpleName();
 
         //SharePoint Online 获取用户链接
 //        …/users(@v)?@v='i%3A05%3At%7Cadfs+with+roles%7Cuser%40domain.com'  本地SharePoint的链接
-        String url  = "/_api/web/siteusers(@v)?@v=%27i%3A0%23.f%7Cmembership%7C"+shareId+"%40"+vo.getDomain()+".onmicrosoft.com%27";
+        String url  = "/_api/web/siteusers(@v)?@v=%27i%3A0%23.f%7Cmembership%7C"+simpleName+"%40"+vo.getDomain()+".onmicrosoft.com%27";
 
         ConnectVo postParam = getPostParam(vo);
 
@@ -391,6 +398,19 @@ public class OfficeRestServiceImpl implements OfficeRestService {
     @Override
     public String getTargetRoleDefinitionId(OfficeRestVo vo) {
         String url  = "/_api/web/roledefinitions/getbyname('"+vo.getPermission()+"')/id";
+        ConnectVo postParam = this.getPostParam(vo);
+        postParam.setUrl(url);
+        String post = this.post(postParam);
+        if (StringUtils.isNotBlank(post)) {
+            System.out.println(CommonLib.prettyFormatJson(post));
+        } else {
+            System.out.println("null");
+        }
+        return SPConver.getId(post);
+    }
+    @Override
+    public String getRoleDefinitions(OfficeRestVo vo) {
+        String url  = "/_api/web/roledefinitions";
         ConnectVo postParam = this.getPostParam(vo);
         postParam.setUrl(url);
         String post = this.post(postParam);

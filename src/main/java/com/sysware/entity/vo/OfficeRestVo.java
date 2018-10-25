@@ -11,6 +11,7 @@ public class OfficeRestVo {
 
     private String userId  ; //eap中用户id
     private String username; //登陆用户名
+    private String simpleName;//登陆简称
     private String groupId  ; //组id
     private String docName  ;//文档名称
     private String docType  ; //excel

@@ -1,6 +1,7 @@
 package com.sysware.conver;
 
 
+import com.google.gson.JsonObject;
 import net.sf.json.JSONObject;
 
 /**
@@ -31,11 +32,8 @@ public class SPConver {
      * @return 用户的JSONObject
      */
     public static JSONObject getUserInfo(String jsonString){
-
-        JSONObject jsonObject = JSONObject.fromObject(jsonString);
-        JSONObject d = jsonObject.getJSONObject("d");
-
-        return  d;
+        JSONObject userInfo = getJSONObject(jsonString);
+        return  userInfo;
     }
 
     /**
@@ -46,13 +44,24 @@ public class SPConver {
      * @return 数据id
      */
     public static String  getId(String jsonString){
-        JSONObject jsonObject = JSONObject.fromObject(jsonString);
-        JSONObject d = jsonObject.getJSONObject("d");
+        JSONObject d = getJSONObject(jsonString);
         if(d != null ){
             return d.getString("Id");
         }
         return null;
     }
 
+    /**
+     * 获取jsonObject对象
+     * @param jsonString SharePoint请求返回的json字符串
+     * @return 数据id
+     */
+    public static JSONObject getJSONObject(String jsonString){
+        JSONObject jsonObject = JSONObject.fromObject(jsonString);
+        if(jsonObject !=null ){
+            return jsonObject.getJSONObject("d");
+        }
+        return null;
+    }
 
 }
