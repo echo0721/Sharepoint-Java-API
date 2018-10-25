@@ -3,9 +3,30 @@ package com.sysware.service.office;
 
 import com.sysware.entity.vo.OfficeRestVo;
 
+import java.util.List;
+
 public interface OfficeRestService {
 
+    /**
+     * 查看文件信息
+     * @param vo
+     * @return
+     */
     String viewFileInfo(OfficeRestVo vo);
+
+    /**
+     * 查询文件或文件夹在 lists 中的item属性
+     * @param vo
+     * @return
+     */
+    String getListItemAllFields(OfficeRestVo vo);
+    /**
+     * 查询文件或文件夹在 lists 中的itemId
+     * @param vo
+     * @return
+     */
+    String getListItemId(OfficeRestVo vo);
+
 
     /**
      * 创建文件夹
@@ -73,5 +94,21 @@ public interface OfficeRestService {
      * @return
      */
     String getDownloadUrl(OfficeRestVo vo);
+
+    /**
+     * 停止权限继承
+     * @param vo
+     * @return
+     */
+    String breakPermission(OfficeRestVo vo);
+
+    /**
+     * 查询文件所有权限
+     * @param vo
+     * @return
+     */
+    String getAllPermission(OfficeRestVo vo);
+
+    List<String> getPrincipalIds(OfficeRestVo vo);
 
 }

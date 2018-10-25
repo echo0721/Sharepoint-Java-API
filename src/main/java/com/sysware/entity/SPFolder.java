@@ -11,5 +11,7 @@ public class SPFolder {
     private String uniqueId;//SP端id
     private String name; //sp端 name
     private String ServerRelativeUrl; //相对路径
+    private String version ;
+    private String itemId ;  //lists中的itemId
 
 }
