@@ -5,5 +5,4 @@ public interface UserSyncService {
     String addUser();
 
 
-
 }

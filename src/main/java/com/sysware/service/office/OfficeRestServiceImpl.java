@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Map;
 /**
  * syswareLib 为顶层库目录
  */
+@Service
 public class OfficeRestServiceImpl implements OfficeRestService {
 
 
